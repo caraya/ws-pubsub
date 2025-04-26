@@ -1,0 +1,23 @@
+{
+  "name": "ws-pubsub",
+  "version": "1.0.0",
+  "description": "WebSocket Pub/Sub server with file-backed persistence",
+  "main": "dist/server.js",
+  "scripts": {
+    "start": "ts-node src/server.ts",
+    "build": "tsc",
+    "test": "playwright test"
+  },
+  "dependencies": {
+    "express": "*",
+    "ws": "*"
+  },
+  "devDependencies": {
+    "@playwright/test": "*",
+    "@types/express": "^5.0.1",
+    "@types/node": "*",
+    "@types/ws": "*",
+    "ts-node": "*",
+    "typescript": "*"
+  }
+}

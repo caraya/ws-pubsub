@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>WS Pub/Sub Client</title>
+</head>
+<body>
+  <h1>WebSocket Pub/Sub</h1>
+  <div>
+    <input id="topic" placeholder="topic" />
+    <input id="message" placeholder="message" />
+    <button id="publish">Publish</button>
+    <button id="subscribe">Subscribe</button>
+    <button id="unsubscribe">Unsubscribe</button>
+  </div>
+  <ul id="log"></ul>
+
+  <script type="module">
+    const socket = new WebSocket(`ws://${location.host}`);
+    const log = (msg) => {
+      const li = document.createElement('li');
+      li.textContent = msg;
+      document.getElementById('log').append(li);
+    };
+
+    socket.addEventListener('message', ev => {
+      const { topic, payload, timestamp } = JSON.parse(ev.data);
+      log(`[${new Date(timestamp).toLocaleTimeString()}] ${topic} → ${payload}`);
+    });
+
+    document.getElementById('publish').onclick = () => {
+      const topic = document.getElementById('topic').value;
+      const payload = document.getElementById('message').value;
+      socket.send(JSON.stringify({ action: 'publish', topic, payload }));
+    };
+    document.getElementById('subscribe').onclick = () => {
+      const topic = document.getElementById('topic').value;
+      socket.send(JSON.stringify({ action: 'subscribe', topic }));
+      log(`Subscribed to ${topic}`);
+    };
+    document.getElementById('unsubscribe').onclick = () => {
+      const topic = document.getElementById('topic').value;
+      socket.send(JSON.stringify({ action: 'unsubscribe', topic }));
+      log(`Unsubscribed from ${topic}`);
+    };
+  </script>
+</body>
+</html>
